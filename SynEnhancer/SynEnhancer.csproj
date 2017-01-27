@@ -70,6 +70,13 @@
     <Compile Include="Action\Action.cs" />
     <Compile Include="Action\SwitchWorkspace.cs" />
     <Compile Include="Action\WorkspaceManager.cs" />
+    <Compile Include="Gui\TrayContext.cs" />
+    <Compile Include="Gui\ConfigurationForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gui\ConfigurationForm.Designer.cs">
+      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Move\MoveEvent.cs" />
     <Compile Include="Move\MoveEventHandler.cs" />
     <Compile Include="Input.cs" />
@@ -120,6 +127,11 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Gui\ConfigurationForm.resx">
+      <DependentUpon>ConfigurationForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
