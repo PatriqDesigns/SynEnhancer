@@ -18,6 +18,7 @@ namespace SynEnhancer
 
             _notifyIcon = new NotifyIcon();
             _notifyIcon.Icon = configWindow.Icon;
+            _notifyIcon.Text = "SynEnhancer";
             _notifyIcon.ContextMenu = new ContextMenu(new[] { configurationItem, exitMenuItem });
             _notifyIcon.Visible = true;
         }
