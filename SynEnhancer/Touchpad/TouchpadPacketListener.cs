@@ -2,16 +2,16 @@
 {
     public class TouchpadPacketListener
     {
-        private readonly MoveEventHandler _eventHandler;
+        private readonly MoveEventHandler _moveEventHandler;
 
         public TouchpadPacketListener()
         {
-            _eventHandler = new MoveEventHandler();
+            _moveEventHandler = new MoveEventHandler();
         }
 
         public void OnPacket(Touchpad touchpad, Packet packet)
         {
-            _eventHandler.Handle(touchpad, packet);
+            _moveEventHandler.Handle(touchpad, packet);
         }
     }
 }

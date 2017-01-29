@@ -1,14 +1,6 @@
-﻿using Microsoft.Win32;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
+using Microsoft.Win32;
 
 namespace SynEnhancer
 {
@@ -30,25 +22,25 @@ namespace SynEnhancer
 
         private void AddApplicationToCurrentUserStartup()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
+            using (var key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
             {
-                key.SetValue(this.Text, Application.ExecutablePath);
+                key?.SetValue(Text, Application.ExecutablePath);
             }
         }
 
         private void RemoveApplicationFromCurrentUserStartup()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
+            using (var key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
             {
-                key.DeleteValue(this.Text, false);
+                key?.DeleteValue(Text, false);
             }
         }
 
         private bool ApplicationOnStartUp()
         {
-            using (RegistryKey key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
+            using (var key = Registry.CurrentUser.OpenSubKey(RunRegKey, true))
             {
-                return key.GetValue(this.Text) != null;
+                return key?.GetValue(Text) != null;
             }
         }
 
@@ -57,5 +49,4 @@ namespace SynEnhancer
             startWithWindows.Checked = ApplicationOnStartUp();
         }
     }
-
 }

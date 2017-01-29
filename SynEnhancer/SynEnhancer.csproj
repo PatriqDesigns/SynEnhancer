@@ -77,13 +77,13 @@
     <Compile Include="Gui\ConfigurationForm.Designer.cs">
       <DependentUpon>ConfigurationForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Input.cs" />
     <Compile Include="Move\MoveEvent.cs" />
     <Compile Include="Move\MoveEventHandler.cs" />
-    <Compile Include="Input.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Move\MoveState.cs" />
     <Compile Include="Move\ThreeFingerScroll.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Touchpad\Packet.cs" />
     <Compile Include="Touchpad\Touchpad.cs" />
     <Compile Include="Touchpad\TouchpadPacketListener.cs" />

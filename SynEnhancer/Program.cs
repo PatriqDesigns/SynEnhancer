@@ -3,10 +3,8 @@ using System.Windows.Forms;
 
 namespace SynEnhancer
 {
-
     internal class Program
     {
-
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -23,5 +21,4 @@ namespace SynEnhancer
             Application.Run(new TrayContext());
         }
     }
-
 }

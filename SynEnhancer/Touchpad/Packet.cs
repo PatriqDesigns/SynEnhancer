@@ -77,6 +77,11 @@ namespace SynEnhancer
             return HasFingerState(SynFingerFlags.SF_FingerMotion);
         }
 
+        public long GetFingerIndex()
+        {
+            return _packet.GetLongProperty(SynPacketProperty.SP_FingerIndex);
+        }
+
         private long GetExtraFingerState()
         {
             return _packet.GetLongProperty(SynPacketProperty.SP_ExtraFingerState);

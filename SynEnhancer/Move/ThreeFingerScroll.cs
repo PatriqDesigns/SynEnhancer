@@ -46,12 +46,12 @@ namespace SynEnhancer
 
             // Check if the X axis was triggered.
             var xDistance = packet.GetX() - _moveState.GetInitialX();
-            var xFactor = Math.Abs(xDistance / (1f * (touchpad.GetMaxX() - touchpad.GetMinX())));
+            var xFactor = Math.Abs(xDistance / (1f * (touchpad.GetSensorHighX() - touchpad.GetSensorLowX())));
             var wasXTriggered = xFactor > XTriggerFactor;
 
             // Check if the Y axis was triggered.
             var yDistance = packet.GetY() - _moveState.GetInitialY();
-            var yFactor = Math.Abs(yDistance / (1f * (touchpad.GetMaxY() - touchpad.GetMinY())));
+            var yFactor = Math.Abs(yDistance / (1f * (touchpad.GetSensorHighY() - touchpad.GetSensorLowY())));
             var wasYTriggered = yFactor > YTriggerFactor;
 
             // If any of them was triggered, start counting again.

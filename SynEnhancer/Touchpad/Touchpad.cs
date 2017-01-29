@@ -1,19 +1,45 @@
 ﻿using System;
+using System.Threading;
+using Microsoft.Win32;
 using SYNCTRLLib;
 
 namespace SynEnhancer
 {
     public class Touchpad
     {
-        private readonly SynDeviceCtrl _device;
-        private readonly SynPacketCtrl _packet;
+        // Touchpad variables.
+        private SynDeviceCtrl _device;
+
+        private SynPacketCtrl _packet;
         private bool _aquired;
 
-        public delegate void PacketHandler(Touchpad touchpad, Packet packet);
+        // The power mode changed handler.
+        private readonly PowerModeChangedEventHandler _powerModeChangedEventHandler;
 
-        public event PacketHandler OnPacket;
+        public delegate void OnPacketEventHandler(Touchpad touchpad, Packet packet);
+
+        public event OnPacketEventHandler OnPacket;
 
         public Touchpad()
+        {
+            // Initialize touchpad.
+            if(!InitializeSynapticsTouchpad()) return;
+
+            // Re-initialize on Resume.
+            // Since during power change events (sleep/resume), something happens
+            // with the touchpad where events are no longer sent.
+            // To handle this we trash out the last device, and re-initialize it again, registrying new events.
+            // Also it seems like if we do it right away it doesn't work, therefore the Sleep(100).
+            _powerModeChangedEventHandler = (sender, args) =>
+            {
+                if (!args.Mode.Equals(PowerModes.Resume)) return;
+                Thread.Sleep(100);
+                InitializeSynapticsTouchpad();
+            };
+            SystemEvents.PowerModeChanged += _powerModeChangedEventHandler;
+        }
+
+        private bool InitializeSynapticsTouchpad()
         {
             _device = new SynDeviceCtrl();
             _packet = new SynPacketCtrl();
@@ -27,15 +53,17 @@ namespace SynEnhancer
             var deviceHandle = api.FindDevice(SynConnectionType.SE_ConnectionAny, SynDeviceType.SE_DeviceTouchPad, -1);
             if (deviceHandle == -1)
             {
-                Console.Error.WriteLine("Couldn't find the device.");
-                return;
+                Console.WriteLine("Couldn't find the device.");
+                return false;
             }
 
             // Select and activate the device.
             _device.Select(deviceHandle);
             _device.Activate();
-            // Add the custom packet handler.
+
+            // Register our custom event.
             _device.OnPacket += OnSynPacket;
+            return true;
         }
 
         private void OnSynPacket()
@@ -57,33 +85,38 @@ namespace SynEnhancer
             if (acquire && !_aquired)
             {
                 _aquired = true;
-                //_device.Acquire((int) SynAcquisitionFlags.SF_AcquireAll);
+                _device.Acquire((int) SynAcquisitionFlags.SF_AcquireAll);
             }
             else if (!acquire && _aquired)
             {
                 _aquired = false;
-                //_device.Unacquire();
+                _device.Unacquire();
             }
         }
 
-        public long GetMinX()
+        public long GetSensorLowX()
         {
             return _device.GetLongProperty(SynDeviceProperty.SP_XLoSensor);
         }
 
-        public long GetMaxX()
+        public long GetSensorHighX()
         {
             return _device.GetLongProperty(SynDeviceProperty.SP_XHiSensor);
         }
 
-        public long GetMinY()
+        public long GetSensorLowY()
         {
             return _device.GetLongProperty(SynDeviceProperty.SP_YLoSensor);
         }
 
-        public long GetMaxY()
+        public long GetSensorHighY()
         {
             return _device.GetLongProperty(SynDeviceProperty.SP_YHiSensor);
+        }
+
+        ~Touchpad()
+        {
+            SystemEvents.PowerModeChanged -= _powerModeChangedEventHandler;
         }
     }
 }
